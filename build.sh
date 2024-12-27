@@ -101,11 +101,17 @@ LIBZSTD_LIB_DIRECTORY='/opt/homebrew/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
 # END
 
+
+
+
+
+
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
 MINIMAL_PATH="/Applications/wxWidgets-3.2.6-release/samples/minimal"
 OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
+EXECUTABLE_PATH=$OUTPUT_PATH/$APP_NAME'.app/Contents/MacOS'
 #the path to the icon of the app
 ICON_NAME='juventus-icon.icns'
 ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
@@ -118,12 +124,12 @@ BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 #this function links library $1 = LIB_A with library $2 = LIB_B, where $LIB_A and $LIB_B are the names of the libraries including their extensiosn. For example: $LIB_B='libpng16.16.dylib', $LIB_A= 'libz.1.dylib'. The function finds the path with which $1 calls $2 and it replaces it with the correct one (@rpath/$2). Usage: to link correctly libpng16.16.dylib and libz.1.dylib, put in this .sh file `link_pair 'libpng16.16.dylib' 'libz.1.dylib' `
 link_pair(){
-    rm -f out.txt; otool -L $APP_LIBRARY_DIRECTORY/$1 >> out.txt
+    rm -f out.txt; otool -L $1 >> out.txt
     # echo 'LIB_A = ' $1
     # echo 'LIB_B = ' $2
     local PATH_TO_REPLACE=$(grep -o '.*'$2 out.txt | sed 's/'$2'$//' | sed 's/[[:space:]]//g')
     # echo 'path to replace = ' $PATH_TO_REPLACE
-    install_name_tool -change $PATH_TO_REPLACE$2 @rpath/$2 $APP_LIBRARY_DIRECTORY/$1
+    install_name_tool -change $PATH_TO_REPLACE$2 @rpath/$2 $1
 }
 
 # Function to process the list and other arguments
@@ -150,7 +156,7 @@ link_list() {
 
 
   echo "${COLOR}\n*********** Printing linkage ...${NC}"
-  otool -L $APP_LIBRARY_DIRECTORY/$1
+  otool -L $1
   echo "${COLOR}*********** ... done.${NC}"
 
 }
@@ -170,20 +176,6 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 #compile Thelemacus
 g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/$BOOST_NAME -L$BOOST_LIB_DIRECTORY -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath $BOOST_LIB_DIRECTORY -I$INPUT_PATH/include -I$INPUT_PATH/src -I$MINIMAL_PATH/
-
-#set links fo $APP_NAME
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $APP_NAME
-install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_filesystem.dylib @rpath/libboost_filesystem.dylib $APP_NAME
-install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_system.dylib @rpath/libboost_system.dylib $APP_NAME
-install_name_tool -change $LIBPNG_LIB_DIRECTORY/$LIBPNG_NAME @rpath/$LIBPNG_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_COCOAU_XRC_NAME @rpath/$LIBWX_COCOAU_XRC_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_COCOAU_HTML_NAME @rpath/$LIBWX_COCOAU_HTML_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_COCOAU_QA_NAME @rpath/$LIBWX_COCOAU_QA_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_COCOAU_CORE_NAME @rpath/$LIBWX_COCOAU_CORE_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_BASEU_XML_NAME @rpath/$LIBWX_BASEU_XML_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_BASEU_NET_NAME @rpath/$LIBWX_BASEU_NET_NAME $APP_NAME
-install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/$LIBWX_BASEU_NAME @rpath/$LIBWX_BASEU_NAME $APP_NAME
-install_name_tool -change $LIBGSL_LIB_DIRECTORY/$LIBGSL_NAME @rpath/$LIBGSL_NAME $APP_NAME
 
 
 ##copy data and images
@@ -214,18 +206,20 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/'$LIBGSL
 #copy the list of libraries
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
-
+#link the app execytable  to libraries contained in the application bundle, so the app is self-sufficient
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $APP_NAME
+link_list "$APP_NAME" "$LIBGSL_NAME $LIBWX_BASEU_NET_NAME $LIBWX_BASEU_XML_NAME $LIBWX_COCOAU_CORE_NAME $LIBWX_COCOAU_HTML_NAME $LIBWX_COCOAU_QA_NAME $LIBWX_COCOAU_XRC_NAME $LIBWX_BASEU_NAME"
 #link libraries to libraries contained in the application bundle, so the app is self-sufficient
-link_list "$LIBPNG_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_COCOAU_XRC_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_COCOAU_HTML_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_BASEU_NAME" "$LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_COCOAU_QA_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_COCOAU_CORE_NAME" "$LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_COCOAU_HTML_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_BASEU_XML_NAME" "$LIBWX_COCOAU_CORE_NAME  $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
-link_list "$LIBWX_BASEU_NET_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBCURL_NAME $LIBPCRE2_NAME"
-link_list "$LIBTIFF_NAME" "$LIBZSTD_NAME $LIBLZMA_NAME $LIBJPEG_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBPNG_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_COCOAU_XRC_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_COCOAU_HTML_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_BASEU_NAME" "$LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_COCOAU_QA_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_COCOAU_CORE_NAME" "$LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_COCOAU_HTML_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_XML_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_BASEU_XML_NAME" "$LIBWX_COCOAU_CORE_NAME  $LIBWX_BASEU_NAME $LIBWX_COCOAU_HTML_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBWX_BASEU_NET_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBWX_BASEU_NAME $LIBJPEG_NAME $LIBCURL_NAME $LIBPCRE2_NAME"
+link_list "$APP_LIBRARY_DIRECTORY/$LIBTIFF_NAME" "$LIBZSTD_NAME $LIBLZMA_NAME $LIBJPEG_NAME"
 
 
 #create the .app folder and subfolders

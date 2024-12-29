@@ -1,44 +1,47 @@
  #!/bin/sh
 
-# pyinstaller --onefile ToyThelemacus.py
 #create enitlements.plist
 
 clear; clear; 
 
 
-# USER_NAME='michelecastellana'
-USER_NAME='macbookpro'
-APP_IN_PATH='/Users/'$USER_NAME'/Desktop'
-PKG_OUT_PATH='/Users/'$USER_NAME'/Desktop/install'
-TEMP_PATH='/Users/'$USER_NAME'/Desktop/temp'
+
+# APP_NAME='ToyThelemacus'
+APP_NAME='Thelemacus'
 
 #to show the keys do `security find-identity -p basic -v`
 
 #new mac
-# DEVELOPER_ID_APPLICATION='8AB2C11D2047F2B295E096E25ABE327C09929797'
-# DEVELOPER_ID_INSTALLER='FF42D55EDD167D5C6ED617A193A843C57CDB0E8B'
+USER_NAME='michelecastellana'
+DEVELOPER_ID_APPLICATION='8AB2C11D2047F2B295E096E25ABE327C09929797'
+DEVELOPER_ID_INSTALLER='FF42D55EDD167D5C6ED617A193A843C57CDB0E8B'
 
 #old mac
-DEVELOPER_ID_APPLICATION='A681D126EC521DC17837FA01B5EA0B51CD9C961E'
-DEVELOPER_ID_INSTALLER='83FCCF7AF76288BF5120A6AF2C9E5C0233AD999A'
+# USER_NAME='macbookpro'
+# DEVELOPER_ID_APPLICATION='A681D126EC521DC17837FA01B5EA0B51CD9C961E'
+# DEVELOPER_ID_INSTALLER='83FCCF7AF76288BF5120A6AF2C9E5C0233AD999A'
+
+APP_IN_PATH='/Users/'$USER_NAME'/Desktop'
+PKG_OUT_PATH='/Users/'$USER_NAME'/Desktop/install'
+TEMP_PATH='/Users/'$USER_NAME'/Desktop/temp'
 
 rm -rf $PKG_OUT_PATH $TEMP_PATH
-mkdir -p $PKG_OUT_PATH $TEMP_PATH/ToyThelemacus.app
+mkdir -p $PKG_OUT_PATH $TEMP_PATH'/'$APP_NAME'.app'
 
 echo "\n\nSigning the code and its libraries ... "
-codesign --deep --force --options=runtime --entitlements ./entitlements.plist --sign $DEVELOPER_ID_APPLICATION --timestamp $APP_IN_PATH/ToyThelemacus.app/Contents/Resources/Libraries/*
-codesign --deep --force --options=runtime --entitlements ./entitlements.plist --sign $DEVELOPER_ID_APPLICATION --timestamp $APP_IN_PATH/ToyThelemacus.app
+codesign --deep --force --options=runtime --entitlements ./entitlements.plist --sign $DEVELOPER_ID_APPLICATION --timestamp $APP_IN_PATH'/'$APP_NAME'.app'/Contents/Resources/Libraries/*
+codesign --deep --force --options=runtime --entitlements ./entitlements.plist --sign $DEVELOPER_ID_APPLICATION --timestamp $APP_IN_PATH'/'$APP_NAME'.app'
 echo " ... done"
 
-ditto $APP_IN_PATH/ToyThelemacus.app $TEMP_PATH/ToyThelemacus.app
+ditto $APP_IN_PATH'/'$APP_NAME'.app' $TEMP_PATH'/'$APP_NAME'.app'
  
 echo "\n\nBuilding the .pkg installer ... "
-productbuild --identifier "com.your.pkgname.pkg" --sign $DEVELOPER_ID_INSTALLER --timestamp --component $TEMP_PATH/ToyThelemacus.app  /Applications $PKG_OUT_PATH/ToyThelemacus.pkg
+productbuild --identifier "com.your.pkgname.pkg" --sign $DEVELOPER_ID_INSTALLER --timestamp --component $TEMP_PATH'/'$APP_NAME'.app'  /Applications $PKG_OUT_PATH'/'$APP_NAME'.pkg'
 echo " .... done."
 
 echo "\n\nChecking the signature ... "
-pkgutil --check-signature $PKG_OUT_PATH/ToyThelemacus.pkg
-        # Package "ToyThelemacus.pkg":
+pkgutil --check-signature $PKG_OUT_PATH'/'$APP_NAME'.pkg'
+        # Package "Thelemacus.pkg":
         # Status: signed by a developer certificate issued by Apple for distribution
         # Signed with a trusted timestamp on: 2024-12-10 16:39:55 +0000
         # Certificate Chain:
@@ -64,7 +67,7 @@ echo "... done."
 
 echo "\n\nSubmitting the app for notarization ... "
 
-notarytool_response=$( xcrun notarytool submit --apple-id "michele.castellana@gmail.com" --team-id "V3N3VGR839" --password "vwfw-otqv-pcir-nmfw" $PKG_OUT_PATH/ToyThelemacus.pkg --wait )
+notarytool_response=$( xcrun notarytool submit --apple-id "michele.castellana@gmail.com" --team-id "V3N3VGR839" --password "vwfw-otqv-pcir-nmfw" $PKG_OUT_PATH'/'$APP_NAME'.pkg' --wait )
 
 echo $notarytool_response
 submission_id=$(echo "$notarytool_response" | awk '/id: / { print $2;exit; }')
@@ -76,7 +79,7 @@ xcrun notarytool info --apple-id "michele.castellana@gmail.com" --team-id "V3N3V
         # Successfully received submission info
         # createdDate: 2024-12-10T16:41:07.037Z
         # id: be289d0d-f420-49ce-8096-c0df1e7f3eb3
-        # name: ToyThelemacus.pkg
+        # name: Thelemacus.pkg
         # status: Accepted
 echo "... done."
 
@@ -90,17 +93,17 @@ xcrun notarytool log --apple-id "michele.castellana@gmail.com" --team-id "V3N3VG
             # "status": "Accepted",
             # "statusSummary": "Ready for distribution",
             # "statusCode": 0,
-            # "archiveFilename": "ToyThelemacus.pkg",
+            # "archiveFilename": "Thelemacus.pkg",
             # "uploadDate": "2024-12-10T16:41:08.718Z",
             # "sha256": "6eed95b5169900c5a98ce042bbc394f1d440319db4c707ec225071c7e870a6e2",
             # "ticketContents": [
             #     {
-            #     "path": "ToyThelemacus.pkg",
+            #     "path": "Thelemacus.pkg",
             #     "digestAlgorithm": "SHA-1",
             #     "cdhash": "5ab5913feb5fb82dd7c9eb5a96d73f3376c873ad"
             #     },
             #     {
-            #     "path": "ToyThelemacus.pkg/ToyThelemacus.pkg Contents/Payload/Applications",
+            #     "path": "Thelemacus.pkg'/'$APP_NAME'.pkg' Contents/Payload/Applications",
             #     "digestAlgorithm": "SHA-256",
             #     "cdhash": "75655762cf598f92a7526c46950f98055455da88",
             #     "arch": "arm64"
@@ -111,11 +114,11 @@ xcrun notarytool log --apple-id "michele.castellana@gmail.com" --team-id "V3N3VG
 echo "... done."
 
 echo "\n\nStapling the .pkg file ..."
-xcrun stapler staple $PKG_OUT_PATH/ToyThelemacus.pkg
+xcrun stapler staple $PKG_OUT_PATH'/'$APP_NAME'.pkg'
 echo "... done"
 
-            # Processing: /Users/michelecastellana/Documents/thelemacus/ToyThelemacus.pkg
-            # Processing: /Users/michelecastellana/Documents/thelemacus/ToyThelemacus.pkg
+            # Processing: /Users/michelecastellana/Documents/thelemacus'/'$APP_NAME'.pkg'
+            # Processing: /Users/michelecastellana/Documents/thelemacus'/'$APP_NAME'.pkg'
             # The staple and validate action worked!
 
 

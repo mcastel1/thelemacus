@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 
 #the name of the app that you want to create
-APP_NAME='ToyThelemacus'
+APP_NAME='Thelemacus'
 APP_VERSION='1.0'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 
@@ -113,8 +113,8 @@ MINIMAL_PATH="/Applications/wxWidgets-3.2.6-release/samples/minimal"
 OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
 EXECUTABLE_PATH=$OUTPUT_PATH/$APP_NAME'.app/Contents/MacOS'
 #the path to the icon of the app
-ICON_NAME='juventus-icon.icns'
-ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
+ICON_NAME='app_icon.icns'
+ICON_PATH=$INPUT_PATH'/Contents/Resources/Images/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 

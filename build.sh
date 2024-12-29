@@ -101,11 +101,6 @@ LIBZSTD_LIB_DIRECTORY='/opt/homebrew/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
 # END
 
-
-
-
-
-
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
@@ -117,10 +112,6 @@ ICON_NAME='app_icon.icns'
 ICON_PATH=$INPUT_PATH'/Contents/Resources/Images/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
-
-
-
-
 
 #this function links library $1 = LIB_A with library $2 = LIB_B, where $LIB_A and $LIB_B are the names of the libraries including their extensiosn. For example: $LIB_B='libpng16.16.dylib', $LIB_A= 'libz.1.dylib'. The function finds the path with which $1 calls $2 and it replaces it with the correct one (@rpath/$2). Usage: to link correctly libpng16.16.dylib and libz.1.dylib, put in this .sh file `link_pair 'libpng16.16.dylib' 'libz.1.dylib' `
 link_pair(){

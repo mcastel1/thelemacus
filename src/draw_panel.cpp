@@ -312,7 +312,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     //render the rectangle
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString((parent->parent->end_label_selection_rectangle).value), position_end_label_selection_rectangle);
+    dc.DrawText(wxString(parent->parent->end_label_selection_rectangle.value), position_end_label_selection_rectangle);
     dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
     
 }

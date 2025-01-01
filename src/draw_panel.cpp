@@ -92,8 +92,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    (parent->parent->start_label_selection_rectangle) = String("");
-    (parent->parent->end_label_selection_rectangle) = String("");
+    start_label_selection_rectangle.set(String(""));
+    end_label_selection_rectangle.set(String(""));
     label_dragged_object = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
@@ -307,13 +307,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_end_label_selection_rectangle, get_size((parent->parent->end_label_selection_rectangle), &dc));
+    dc.DrawRectangle(position_end_label_selection_rectangle, get_size(end_label_selection_rectangle, &dc));
     
     //render the rectangle
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(parent->parent->end_label_selection_rectangle.value), position_end_label_selection_rectangle);
-    dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
+    dc.DrawText(wxString(end_label_selection_rectangle.value), position_end_label_selection_rectangle);
+    dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
     
 }
 
@@ -1682,8 +1682,8 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             }
             
             
-            (parent->parent->start_label_selection_rectangle) = String("");
-            (parent->parent->end_label_selection_rectangle) = String("");
+            start_label_selection_rectangle.set(String(""));
+            end_label_selection_rectangle.set(String(""));
             
             parent->parent->RefreshAll();
             FitAll();
@@ -2716,7 +2716,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                      (*(parent->parent->geo_position_now)),
                                                                                      &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle),
-                                                                                     &(parent->parent->end_label_selection_rectangle)
+                                                                                     &end_label_selection_rectangle
                                                                                      );
                 
                 
@@ -3193,7 +3193,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                              (*(parent->parent->geo_position_now)),
                                                                                              &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
-                                                                                             &(parent->parent->start_label_selection_rectangle));
+                                                                                             &start_label_selection_rectangle);
                         
                         ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
                         check = true;
@@ -3384,15 +3384,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 
                 //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
                 
-                (parent->parent->start_label_selection_rectangle) = String("");
-                (parent->parent->end_label_selection_rectangle) = String("");
+                start_label_selection_rectangle.set(String(""));
+                end_label_selection_rectangle.set(String(""));
                 
             }else {
                 //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
                 
                 (parent->parent->selection_rectangle) = false;
-                (parent->parent->start_label_selection_rectangle) = String("");
-                (parent->parent->end_label_selection_rectangle) = String("");
+                start_label_selection_rectangle.set(String(""));
+                end_label_selection_rectangle.set(String(""));
                 
             }
             

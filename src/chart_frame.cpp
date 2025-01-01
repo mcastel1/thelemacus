@@ -83,6 +83,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_slider = new wxBoxSizer(wxVERTICAL);
+    sizer_chart_scale = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons = new wxGridSizer(3, 3, 0, 0);
     
     //initialize the variable neededed for slider
@@ -201,7 +202,12 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     sizer_buttons->Add(empty_text_5, 0, wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
 
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    sizer_slider->Add(chart_scale, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    
+    sizer_chart_scale->AddStretchSpacer();
+    sizer_chart_scale->Add(chart_scale, wxALIGN_CENTER_VERTICAL | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    sizer_chart_scale->AddStretchSpacer();
+    sizer_slider->Add(sizer_chart_scale, flags);
+
     observer_height->StaticLengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));

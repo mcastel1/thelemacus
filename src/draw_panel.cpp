@@ -3193,7 +3193,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                              (*(parent->parent->geo_position_now)),
                                                                                              &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
-                                                                                             &start_label_selection_rectangle);
+                                                                                             &(((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle));
                         
                         ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
                         check = true;

@@ -41,7 +41,7 @@ public:
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);
     void set(const String&);
-    void set(string);
+    void set(const string&);
     void set_to_current_time(void);
     String append(String);
     void appendto(String);

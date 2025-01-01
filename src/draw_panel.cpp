@@ -92,8 +92,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    start_label_selection_rectangle.set(String(""));
-    end_label_selection_rectangle.set(String(""));
+    start_label_selection_rectangle.set("");
+    end_label_selection_rectangle.set("");
     label_dragged_object = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
@@ -1682,8 +1682,8 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             }
             
             
-            start_label_selection_rectangle.set(String(""));
-            end_label_selection_rectangle.set(String(""));
+            start_label_selection_rectangle.set("");
+            end_label_selection_rectangle.set("");
             
             parent->parent->RefreshAll();
             FitAll();
@@ -3182,13 +3182,14 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             //            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
             parent->parent->geo_position_start->set((*(parent->parent->geo_position_now)));
             
-            //store the position at the beginning of the selection process, to compute the zoom factor
-            //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
+            //store the Position at the beginning of the selection process, to compute the zoom factor
+            //run over all ChartFrames
             for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
                 
                 if (
                     (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((*(parent->parent->geo_position_start)), ((parent->parent->chart_frames)[i])->draw_panel->projection_start, false)) {
-                        //*geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
+                        //*geo_position_start is valid in the i-th DrawPanel : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
+                        
                         
                         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                              (*(parent->parent->geo_position_now)),
@@ -3198,7 +3199,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
                         check = true;
                         
-                    }
+                }
+                
+                //a selection rectangle is being started -> set end_label_selection_rectangle to empty
+                ((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle.set("");
                 
             }
             
@@ -3384,15 +3388,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 
                 //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
                 
-                start_label_selection_rectangle.set(String(""));
-                end_label_selection_rectangle.set(String(""));
+                start_label_selection_rectangle.set("");
+                end_label_selection_rectangle.set("");
                 
             }else {
                 //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
                 
                 (parent->parent->selection_rectangle) = false;
-                start_label_selection_rectangle.set(String(""));
-                end_label_selection_rectangle.set(String(""));
+                start_label_selection_rectangle.set("");
+                end_label_selection_rectangle.set("");
                 
             }
             

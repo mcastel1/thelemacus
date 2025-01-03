@@ -36,11 +36,11 @@ echo " ... done"
 ditto $APP_IN_PATH'/'$APP_NAME'.app' $TEMP_PATH'/'$APP_NAME'.app'
  
 echo "\n\nBuilding the .pkg installer ... "
-productbuild --identifier "com.your.pkgname.pkg" --sign $DEVELOPER_ID_INSTALLER --timestamp --component $TEMP_PATH'/'$APP_NAME'.app'  /Applications $PKG_OUT_PATH'/'$APP_NAME'.pkg'
+productbuild --identifier "com.your.pkgname.pkg" --sign $DEVELOPER_ID_INSTALLER --timestamp --component $TEMP_PATH'/'$APP_NAME'.app'  /Applications $PKG_OUT_PATH'/'$APP_NAME'Installer.pkg'
 echo " .... done."
 
 echo "\n\nChecking the signature ... "
-pkgutil --check-signature $PKG_OUT_PATH'/'$APP_NAME'.pkg'
+pkgutil --check-signature $PKG_OUT_PATH'/'$APP_NAME'Installer.pkg'
         # Package "Thelemacus.pkg":
         # Status: signed by a developer certificate issued by Apple for distribution
         # Signed with a trusted timestamp on: 2024-12-10 16:39:55 +0000
@@ -67,7 +67,7 @@ echo "... done."
 
 echo "\n\nSubmitting the app for notarization ... "
 
-notarytool_response=$( xcrun notarytool submit --apple-id "michele.castellana@gmail.com" --team-id "V3N3VGR839" --password "vwfw-otqv-pcir-nmfw" $PKG_OUT_PATH'/'$APP_NAME'.pkg' --wait )
+notarytool_response=$( xcrun notarytool submit --apple-id "michele.castellana@gmail.com" --team-id "V3N3VGR839" --password "vwfw-otqv-pcir-nmfw" $PKG_OUT_PATH'/'$APP_NAME'Installer.pkg' --wait )
 
 echo $notarytool_response
 submission_id=$(echo "$notarytool_response" | awk '/id: / { print $2;exit; }')
@@ -114,7 +114,7 @@ xcrun notarytool log --apple-id "michele.castellana@gmail.com" --team-id "V3N3VG
 echo "... done."
 
 echo "\n\nStapling the .pkg file ..."
-xcrun stapler staple $PKG_OUT_PATH'/'$APP_NAME'.pkg'
+xcrun stapler staple $PKG_OUT_PATH'/'$APP_NAME'Installer.pkg'
 echo "... done"
 
             # Processing: /Users/michelecastellana/Documents/thelemacus'/'$APP_NAME'.pkg'

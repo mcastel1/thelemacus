@@ -100,7 +100,7 @@
 \author{Michele Castellana}
 \date{\today\\
 \includegraphics[height=0.2\textwidth]{figures/qr-code-thelemacus.png}
-\hspace{\stretch{2}} \includegraphics[height=0.2\textwidth]{figures/logo-cnrs.pdf}
+\hspace{\stretch{2}} \includegraphics[height=0.2\textwidth]{figures/logo-cnrs.png}
 }
 \softwarelogo{\includegraphics[width=0.8\textwidth]{figures/title.png}}
 \begin{document}
@@ -126,15 +126,32 @@ Also, \thel is conceived to make the user's life easy, and it is designed for an
 
 \subsection{\thel license}\label{sec-license}
 
-\thel is ``free software''; this means that everyone is free to use it. The software is not in the public domain \cite{castellana2024thelemacus}; it is copyrighted and there are conditions on its distribution. These conditions are designed to permit everything that a good cooperating citizen would want to do.
+\thel has its own license and  is ``free software''; this means that everyone is free to use it. \thel is not in the public domain \cite{castellana2024thelemacus}; it is copyrighted and there are conditions on its distribution. These conditions are designed to permit everything that a good cooperating citizen would want to do.
+
+
 
 \subsection{Obtaining \thel}
 
-The source code for the library can be obtained from its  GitHub \href{https://github.com/mcastel1/thelemacus}{repository}. The executable can be downloaded from my \href{\thelemacusurl}{website}, for both OSx and Windows.  Announcements of new releases, updates and other  events are made \href{\thelemacusurl}{online}. 
+
+
+For macOS, \thel's installer can be downloaded  \href{\thelemacusurl}{here}: Click on the .pkg installer and \thel will be placed in your /Applications folder: click on it, and \thel will start.  
+
+For Microsoft Windows, \thel can be downloaded  \href{\thelemacusurl}{here}: download the .exe file wherever you want on your disk, click on it, and \thel will start. 
+
+The source code for \thel can be obtained from its  GitHub \href{https://github.com/mcastel1/thelemacus}{repository}. Announcements of new releases, updates and other  events will be  made \href{\thelemacusurl}{online}. 
 
 \subsection{No warranty}
 
-The \thel has no warranty, it is provided ``as is,'' use at your own risk. It is your responsibility to validate the behavior of \thel and its accuracy. 
+The \thel has no warranty, use it at your own risk. It is your responsibility to validate the behavior of \thel and its accuracy. 
+
+\thel's provider makes no representations about the
+suitability, use, or performance of \thel, or about any
+content or information made accessible by it, for any
+purpose. \thel is provided ``as is,'' without express or
+implied warranties including, but not limited to, any implied
+warranties of merchantability, fitness for a particular purpose, or
+noninfringement with respect to the software. \thel's provider is not
+obligated to support or issue updates to the software.
 
 \subsection{Reporting bugs}
 
@@ -405,7 +422,7 @@ To enter a  \gls{sight}, read  \cref{sec-impatient}  first.  Press  \inlinefigur
   \includegraphics[width=0.9\textwidth]{figures/astronomical-position-mercator.png}
   \caption{
     \label{fig-astronomical-position}
-    The chart frame with the Mercator projection, showing the crossing of the three \glspl{route} (red, green and blue) yields the astronomical \gls{position} (red dot located at the \glspl{route}' crossing).  
+    The chart frame with the Mercator projection, showing the crossing of the three \glspl{route} (red, green and blue) yields the astronomical \gls{position} (orange dot).  
   }
 \end{figure}
 
@@ -434,7 +451,7 @@ To transport a sight:
   \item double clicking on it, or
   \item selecting it and pressing Enter on the keyboard. 
 \end{itemize}
-\item with a new \gls{route}: Press \inlinefigure{1.4}{figures/button-new-route.png}, enter the information in the \gls{route} frame, and press \inlinefigure{1.5}{figures/routeframe-transport-button.png}. 
+\item with a new \gls{route}: Press \inlinefigure{1.4}{figures/new-route-button.png}, enter the information in the \gls{route} frame, and press \inlinefigure{1.5}{figures/routeframe-transport-button.png}. 
 \end{itemize}
 \end{itemize}
 An animation will move the transporting \gls{route} in place, then transport the \gls{route} related to the \gls{sight}, and move back the transporting \gls{route} to its original \gls{position}. 
@@ -490,7 +507,7 @@ In \thel, \glspl{sight}, \glspl{position} and \glspl{route} are stored in .nav f
 
 You can load, save, and `save as' files as by either using \thel menu bar, or the keyboard shortcuts 
 \setmenukeysmac
-\keys{\cmd + O}, \keys{\cmd + S}, \keys{\cmd + \shift  + S } on OSx, and  
+\keys{\cmd + O}, \keys{\cmd + S}, \keys{\cmd + \shift  + S } on macOS, and  
 \setmenukeyswin
 \keys{\ctrl + O}, \keys{\ctrl + S}, \keys{\ctrl +   \shift + S} on Windows, respectively.  
 
@@ -499,7 +516,7 @@ You can load, save, and `save as' files as by either using \thel menu bar, or th
 
 \section*{Acknowledgments}
 
-Thanks to Lionel Chiron, Enrico Filippi and Mathieu Coppey for helping me testing \thel and giving useful insights, and Patrick Moreau for his counsel on the software license. 
+Thanks to Gioia Boschi, Lionel Chiron, Enrico Filippi and Mathieu Coppey for helping me testing \thel and giving useful insights, and Patrick Moreau for his counsel on the software license. 
 
 \printacronyms[pages={display=all,seq/use=false}]
 

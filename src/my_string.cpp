@@ -283,12 +283,12 @@ void String::set(String name, String input_string, [[maybe_unused]] String prefi
 //inline 
 void String::set(const String& input_string) {
 
-    value = (input_string.value);
+    set(input_string.value);
 
 }
 
 
-void String::set(string input_string) {
+void String::set(const string& input_string) {
 
     value = input_string;
 

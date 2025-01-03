@@ -45,7 +45,7 @@ public:
     StaticText *chart_scale;
     //a static text displaying the height of the observer
     StaticLengthField<ChartFrame>* observer_height;
-    wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
+    wxBoxSizer *sizer_v, *sizer_h, *sizer_slider, *sizer_chart_scale;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
     wxSlider* slider;

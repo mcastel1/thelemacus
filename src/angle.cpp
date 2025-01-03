@@ -424,6 +424,11 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
         i++;
     }
     
+    //    if the arcminute part is smaller than epsilon_double, set it to 0.0 to avoid odd values such as '-0.0'
+    if(fabs(x) < epsilon_double){
+        x = 0.0;
+    }
+    
     if (add_spaces) {
         //set the fixed precision min, so all angles that are printed out have the same number of decimal points
         min << fixed;
